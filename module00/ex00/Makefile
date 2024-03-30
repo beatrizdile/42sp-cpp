@@ -6,7 +6,7 @@ VALGRIND = valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 SRC = megaphone.cpp
 
 OBJ_DIR = build
-OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
