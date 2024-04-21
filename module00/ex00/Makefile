@@ -1,29 +1,19 @@
-NAME = megaphone
-CC = c++
-FLAGS = -Wall -Wextra -Werror -std=c++98
-VALGRIND = valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+NAME 			= megaphone
+CC 				= c++
+FLAGS 			= -Wall -Wextra -Werror -std=c++98
+VALGRIND 		= valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
-SRC = megaphone.cpp
-
-OBJ_DIR = build
-OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+SRC 			= $(wildcard *.cpp)
 
 all: $(NAME)
 
-$(NAME): $(OBJ_DIR) $(OBJ)
-	$(CC) $(FLAGS) $(OBJ) -o $(NAME)
-
-$(OBJ_DIR)/%.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@
-
-$(OBJ_DIR):
-	mkdir -p $@
+$(NAME): $(SRC)
+	$(CC) $(FLAGS) $(SRC) -o $(NAME)
 
 clean:
-	rm -rf $(OBJ_DIR)
+	rm -rf $(NAME)
 
 fclean: clean
-	rm -f $(NAME)
 
 re: fclean all
 
