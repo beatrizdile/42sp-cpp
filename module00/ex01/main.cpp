@@ -1,6 +1,11 @@
+#include "Contact.hpp"
+#include "PhoneBook.hpp"
 #include <iostream>
 
 int main()
 {
-	std::cout << "oi\n";
+	Contact contact;
+	PhoneBook phonebook;
+
+	return (0);
 }

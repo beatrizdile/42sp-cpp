@@ -5,7 +5,7 @@ VALGRIND 		= valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 SRC 			= $(wildcard *.cpp)
 INCLUDE_FILES 	= $(wildcard *.hpp)
-INCLUDE_FLAG 	= -Isrc
+INCLUDE_FLAG 	= -I.
 
 all: $(NAME)
 
