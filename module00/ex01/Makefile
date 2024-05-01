@@ -3,9 +3,9 @@ CC 				= c++
 FLAGS 			= -Wall -Wextra -Werror -std=c++98
 VALGRIND 		= valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
-SRC 			= $(wildcard *.cpp)
-INCLUDE_FILES 	= $(wildcard *.hpp)
-INCLUDE_FLAG 	= -I.
+SRC 			= $(wildcard src/*.cpp)
+INCLUDE_FILES 	= $(wildcard inc/*.hpp)
+INCLUDE_FLAG 	= -Iinc
 
 all: $(NAME)
 

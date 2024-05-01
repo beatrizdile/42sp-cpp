@@ -6,6 +6,7 @@ class PhoneBook
 	public:
 		PhoneBook();
 		~PhoneBook();
+		void phoneBookPrompt();
 	private:
 
 };
