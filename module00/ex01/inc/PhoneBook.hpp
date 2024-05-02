@@ -1,5 +1,7 @@
 #ifndef PHONEBOOK_HPP
 #define PHONEBOOK_HPP
+#include <Contact.hpp>
+#include <vector>
 
 class PhoneBook
 {
@@ -7,7 +9,10 @@ class PhoneBook
 		PhoneBook();
 		~PhoneBook();
 		void phoneBookPrompt();
+		void addContact(const Contact& contact);
+		void printAllContacts();
 	private:
+		std::vector<Contact> contacts;
 
 };
 
