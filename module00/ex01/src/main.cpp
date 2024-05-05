@@ -29,15 +29,13 @@ int main()
 		if (inputInLower == ADD)
 			phoneBook.addContact(phoneBook.createContact());
 		else if (inputInLower == SEARCH)
-			std::cout << "valid command!\n";
+			phoneBook.printAllContacts();
 		else if (inputInLower == EXIT)
 			break;
 		else
 			std::cout << "Invalid Command!" << std::endl;
 	}
-	phoneBook.printAllContacts();
+	std::cout << "Goodbye!" << std::endl;
 
 	return (0);
 }
-
-// phone error handling
