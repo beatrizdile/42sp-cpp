@@ -84,6 +84,12 @@ void PhoneBook::searchContacts() {
 		unsigned long input;
 		std::cin >> input;
 
+		if (std::cin.fail()) {
+			std::cout << std::endl << "Invalid input. Please enter an integer." << std::endl;
+			std::cin.clear();
+			return ;
+		}
+
 		if (input < contactsCount && input < MAX_CONTACTS_SIZE)
 			contacts[input].displayContact();
 		else
