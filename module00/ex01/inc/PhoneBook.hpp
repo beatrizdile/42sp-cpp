@@ -1,9 +1,6 @@
 #ifndef PHONEBOOK_HPP
 #define PHONEBOOK_HPP
-#include <Contact.hpp>
-#include <vector>
-
-# define MAX_CONTACTS_SIZE 8
+#include "Contact.hpp"
 
 class PhoneBook
 {
@@ -18,6 +15,7 @@ class PhoneBook
 	private:
 		std::vector<Contact> contacts;
 		size_t contactsCount;
+		void printHeader();
 };
 
 #endif

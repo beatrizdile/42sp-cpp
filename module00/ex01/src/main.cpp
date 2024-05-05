@@ -1,10 +1,5 @@
 #include "Contact.hpp"
 #include "PhoneBook.hpp"
-#include <iostream>
-
-# define ADD "add"
-# define SEARCH "search"
-# define EXIT "exit"
 
 std::string toLower(std::string str)
 {
@@ -29,13 +24,13 @@ int main()
 		if (inputInLower == ADD)
 			phoneBook.addContact(phoneBook.createContact());
 		else if (inputInLower == SEARCH)
-			phoneBook.printAllContacts();
+			phoneBook.searchContacts();
 		else if (inputInLower == EXIT)
 			break;
 		else
 			std::cout << "Invalid Command!" << std::endl;
 	}
-	std::cout << "Goodbye!" << std::endl;
+	std::cout << std::endl << "Goodbye!" << std::endl;
 
 	return (0);
 }

@@ -1,5 +1,4 @@
 #include "PhoneBook.hpp"
-#include <iostream>
 
 PhoneBook::PhoneBook(){
 	std::cout << "Welcome to crappy awesome PhoneBook!" << std::endl;
@@ -71,6 +70,32 @@ void PhoneBook::printAllContacts() {
 	}
 }
 
+void PhoneBook::printHeader() {
+	std::cout << "|" << std::setw(10) << "Index" << "|" <<
+              std::setw(10) << "First name" << "|" <<
+              std::setw(10) << "Last name" << "|" <<
+              std::setw(10) << "Nickname" << "|" << std::endl <<
+			  DASH << std::endl;
+}
+
 void PhoneBook::searchContacts() {
-	
+	if (contactsCount == 0) {
+		std::cout << std::endl << "No contacts to display." << std::endl;
+	}
+	else {
+		printHeader();
+		for (size_t i = 0; i < contacts.size(); i++)
+			contacts[i].displayContactRow(i);
+
+		std::cout << std::endl
+		<< "Insert the index of the contact to be displayed:" << std::endl;
+
+		unsigned long input;
+		std::cin >> input;
+
+		if (input < contactsCount && input < MAX_CONTACTS_SIZE)
+			contacts[input].displayContact();
+		else
+			std::cout << "Invalid index." << std::endl;
+	}
 }
