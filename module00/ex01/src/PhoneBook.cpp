@@ -5,11 +5,7 @@ PhoneBook::PhoneBook(){
 	std::cout << "Welcome to crappy awesome PhoneBook!" << std::endl;
 }
 
-PhoneBook::~PhoneBook(){
-	// for (std::size_t i = 0; i < contacts.size(); i++) {
-	// 	delete &contacts[i];
-	// }
-}
+PhoneBook::~PhoneBook(){ return; }
 
 void PhoneBook::phoneBookPrompt(){
 	std::cout << std::endl << "Please, select one of the following commands:" << std::endl 
@@ -18,10 +14,36 @@ void PhoneBook::phoneBookPrompt(){
 	<< "EXIT	- to quit the program" << std::endl;
 }
 
+Contact PhoneBook::createContact()
+{
+	std::cout << std::endl << "To register a new contact, please complete the following fields: " << std::endl;
+
+	std::string firstName;
+	std::cout << "Fist name: " << std::endl;
+	std::cin >> firstName;
+	
+	std::string lastName;
+	std::cout << "Last name: " << std::endl;
+	std::cin >> lastName;
+
+	std::string nickname;
+	std::cout << "Nickname: " << std::endl;
+	std::cin >> nickname;
+
+	std::string phone;
+	std::cout << "Phone: " << std::endl;
+	std::cin >> phone;
+
+	std::string darkestSecret;
+	std::cout << "Darkest Secret: " << std::endl;
+	std::cin >> darkestSecret;
+
+	return (Contact(firstName, lastName, nickname, phone, darkestSecret));
+}
+
 void PhoneBook::addContact(const Contact& contact){
 	contacts.push_back(contact);
 	std::cout << std::endl << "The following contact was added to the PhoneBook:" << std::endl;
-	std::cout << "Address: " << &contact << std::endl;
 	std::cout << "Name: " << contact.getFirstName() << std::endl;
 	std::cout << "Last name: " << contact.getLastName() << std::endl;
 	std::cout << "Nickname: " << contact.getNickname() << std::endl;

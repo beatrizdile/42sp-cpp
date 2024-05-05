@@ -10,6 +10,7 @@ class PhoneBook
 		~PhoneBook();
 		void phoneBookPrompt();
 		void addContact(const Contact& contact);
+		Contact createContact();
 		void printAllContacts();
 	private:
 		std::vector<Contact> contacts;

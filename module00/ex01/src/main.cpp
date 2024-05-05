@@ -1,7 +1,19 @@
 #include "Contact.hpp"
 #include "PhoneBook.hpp"
-#include "utils.hpp"
 #include <iostream>
+
+# define ADD "add"
+# define SEARCH "search"
+# define EXIT "exit"
+
+std::string toLower(std::string str)
+{
+    for (int i = 0; i < (int)str.size(); i++) {
+		str[i] = tolower(str[i]);
+	}
+
+	return str;
+}
 
 int main()
 {
@@ -15,7 +27,7 @@ int main()
 		std::string inputInLower = toLower(input);
 
 		if (inputInLower == ADD)
-			phoneBook.addContact(*createContact());
+			phoneBook.addContact(phoneBook.createContact());
 		else if (inputInLower == SEARCH)
 			std::cout << "valid command!\n";
 		else if (inputInLower == EXIT)
@@ -23,7 +35,7 @@ int main()
 		else
 			std::cout << "Invalid Command!" << std::endl;
 	}
-	// phoneBook.printAllContacts();
+	phoneBook.printAllContacts();
 
 	return (0);
 }
