@@ -61,15 +61,6 @@ void PhoneBook::addContact(const Contact& contact){
 	std::cout << "Darkest secret: " << contact.getDarkestSecret() << std::endl;
 }
 
-void PhoneBook::printAllContacts() {
-	for (std::size_t i = 0; i < contacts.size(); i++) {
-		std::cout << "Index: " << i << std::endl;
-		std::cout << "First Name: " << contacts[i].getFirstName() << std::endl;
-		std::cout << "Last Name: " << contacts[i].getLastName() << std::endl;
-		std::cout << std::endl;
-	}
-}
-
 void PhoneBook::printHeader() {
 	std::cout << "|" << std::setw(10) << "Index" << "|" <<
               std::setw(10) << "First name" << "|" <<

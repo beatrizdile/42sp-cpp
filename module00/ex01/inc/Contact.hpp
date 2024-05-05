@@ -3,13 +3,12 @@
 
 #include <iostream>
 #include <vector>
-#include <cstdlib>
 #include <iomanip>
 #include <string>
 
-#define ADD "add"
-#define SEARCH "search"
-#define EXIT "exit"
+#define ADD "ADD"
+#define SEARCH "SEARCH"
+#define EXIT "EXIT"
 #define MAX_CONTACTS_SIZE 8
 #define DASH "-------------------------------------------------"
 

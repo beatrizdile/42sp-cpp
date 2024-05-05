@@ -1,15 +1,6 @@
 #include "Contact.hpp"
 #include "PhoneBook.hpp"
 
-std::string toLower(std::string str)
-{
-    for (int i = 0; i < (int)str.size(); i++) {
-		str[i] = tolower(str[i]);
-	}
-
-	return str;
-}
-
 int main()
 {
 	PhoneBook phoneBook;
@@ -19,13 +10,12 @@ int main()
 	{
 		phoneBook.phoneBookPrompt();
 		std::cin >> input;
-		std::string inputInLower = toLower(input);
 
-		if (inputInLower == ADD)
+		if (input == ADD)
 			phoneBook.addContact(phoneBook.createContact());
-		else if (inputInLower == SEARCH)
+		else if (input == SEARCH)
 			phoneBook.searchContacts();
-		else if (inputInLower == EXIT)
+		else if (input == EXIT)
 			break;
 		else
 			std::cout << "Invalid Command!" << std::endl;

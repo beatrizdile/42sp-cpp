@@ -10,7 +10,6 @@ class PhoneBook
 		void phoneBookPrompt();
 		void addContact(const Contact& contact);
 		Contact createContact();
-		void printAllContacts();
 		void searchContacts();
 	private:
 		std::vector<Contact> contacts;
