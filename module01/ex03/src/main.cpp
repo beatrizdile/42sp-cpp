@@ -1,10 +1,24 @@
 #include "Weapon.hpp"
+#include "HumanA.hpp"
+#include "HumanB.hpp"
 
 int main()
 {
 	Weapon sword("espadinha");
-	std::cout << sword.getType() << std::endl;
 
+	HumanA bilokah("beatriz", sword);
+	bilokah.attack();
 	sword.setType("espanDONA");
-	std::cout << sword.getType() << std::endl;
+	bilokah.attack();
+
+	std::cout << "---------------------------" << std::endl;
+
+	HumanB rodrigo("rods");
+	rodrigo.attack();
+	rodrigo.setWeapon(sword);
+	rodrigo.attack();
+	sword.setType("machado");
+	rodrigo.attack();
+
+
 }
