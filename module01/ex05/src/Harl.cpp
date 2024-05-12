@@ -5,7 +5,7 @@ Harl::Harl() {}
 Harl::~Harl() {}
 
 void Harl::debug(){
-	std::cout << "I love having extra bacon for my 7XL-double-cheese-triple-pickle-specialketchup burger. I really do!" << std::endl;
+	std::cout << "I love having extra bacon for my 7XL-double-cheese-triple-pickle-special-ketchup burger. I really do!" << std::endl;
 }
 
 void Harl::info(){
@@ -21,7 +21,15 @@ void Harl::error(){
 }
 
 void Harl::complain(std::string level){
-	(void) level;
-	void (Harl::*func)(void) = &Harl::error;
-	(this->*func)();
+	std::string levels[4] = {"DEBUG", "INFO", "WARNING", "ERROR"};
+	void (Harl::*func[4])(void) = {&Harl::debug, &Harl::info, &Harl::warning, &Harl::error};
+	
+	for (int i = 0; i < 4; i++){
+		if (level == levels[i]){
+			(this->*func[i])();
+			return;
+		}
+	}
+
+	std::cout << "Nothing to talk about it." << std::endl;
 }
