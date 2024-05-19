@@ -37,6 +37,12 @@ class Fixed
 		Fixed& operator--();
 		Fixed operator--(int dummy);
 
+		// min & max
+		static Fixed& min(Fixed& first, Fixed& second);
+		static Fixed& min(const Fixed& first, const Fixed& second);
+		static Fixed& max(Fixed& first, Fixed& second);
+		static Fixed& max(const Fixed& first, const Fixed& second);
+
 		// methods
 		float toFloat(void) const;
 		float toInt(void) const;
@@ -46,8 +52,7 @@ class Fixed
 		void	setRawBits(int const raw);
 };
 
-// ostream cout
+// ostream
 std::ostream& operator<<(std::ostream& os, const Fixed& other);
-
 
 #endif

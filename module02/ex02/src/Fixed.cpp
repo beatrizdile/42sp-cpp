@@ -1,20 +1,21 @@
 #include "Fixed.hpp"
 
-// Default constructor
+// Orthodox Canonical Form
+// default constructor
 Fixed::Fixed() : value(0) {}
 
-// Default copy constructor
+// default copy constructor
 Fixed::Fixed(const Fixed& copy){
 	*this = copy;
 };
 
-// Int constructor
+// int constructor
 Fixed::Fixed(const int num) : value(num << fractionalBits){};
 
-// Float constructor
+// float constructor
 Fixed::Fixed(const float num) : value(roundf(num * (1 << fractionalBits))){};
 
-// Copy assignment operator
+// copy assignment operator
 Fixed& Fixed::operator=(const Fixed& other){
 	if (this != &other){
 		this->value = other.getRawBits();
@@ -22,7 +23,7 @@ Fixed& Fixed::operator=(const Fixed& other){
 	return *this;
 };
 
-// Destructor
+// destructor
 Fixed::~Fixed() {}
 
 
@@ -51,7 +52,6 @@ std::ostream& operator<<(std::ostream& os, const Fixed& other){
 	os << other.toFloat();
 	return os;
 };
-
 
 // comparison operators
 bool Fixed::operator>(const Fixed& other){
@@ -95,7 +95,6 @@ float Fixed::operator/(const Fixed& other){
 	return (this->toFloat() / other.toFloat());
 };
 
-
 // increment/decrement operators
 Fixed& Fixed::operator++(){
 	++this->value;
@@ -119,4 +118,21 @@ Fixed Fixed::operator--(int dummy){
 	Fixed tmp = *this;
 	--this->value;
 	return tmp;
+};
+
+// min & max
+Fixed& Fixed::min(Fixed& first, Fixed& second){
+	return first.toFloat() > second.toFloat() ? second : first;
+};
+
+Fixed& Fixed::min(const Fixed& first, const Fixed& second){
+	return first.toFloat() > second.toFloat() ? (Fixed&)second : (Fixed&)first;
+};
+
+Fixed& Fixed::max(Fixed& first, Fixed& second){
+	return first.toFloat() < second.toFloat() ? second : first;
+};
+
+Fixed& Fixed::max(const Fixed& first, const Fixed& second){
+	return first.toFloat() < second.toFloat() ? (Fixed&)second : (Fixed&)first;
 };
