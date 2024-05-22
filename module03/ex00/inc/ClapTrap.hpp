@@ -33,6 +33,7 @@ class ClapTrap
 		int				attack_damage;
 
 		bool			hasEnergy(void);
+		bool			isDead(void);
 		void			printStatus(void);
 };
 

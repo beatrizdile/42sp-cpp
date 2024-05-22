@@ -4,13 +4,23 @@
 int main(void) 
 {
 	ClapTrap bea("Beatriz");
-	ClapTrap rods("Rodrigo");
 
+	bea.takeDamage(1);
 	bea.attack("the dummy");
 	bea.takeDamage(5);
+	bea.beRepaired(3); 
+	// test energy points
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	// bea.attack("the dummy");
+	bea.takeDamage(10);
+	bea.attack("the dummy");
 	bea.beRepaired(3);
-
-	rods.attack("the dummy");
-	rods.takeDamage(5);
-	rods.beRepaired(3);
 }

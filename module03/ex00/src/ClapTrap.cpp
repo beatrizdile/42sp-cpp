@@ -34,6 +34,14 @@ bool ClapTrap::hasEnergy(void){
 	return true;
 };
 
+bool ClapTrap::isDead(void){
+	if (getHitPoints() == 0){
+		std::cout << "ClapTrap " << name << " is dead!" << std::endl;
+		return true;
+	}
+	return false;
+};
+
 void ClapTrap::printStatus(void){
 	std::cout << "--------------------------" << std::endl;
 	std::cout << "ClapTrap " << name << " status:" << std::endl;
@@ -43,7 +51,7 @@ void ClapTrap::printStatus(void){
 };
 
 void ClapTrap::attack(const std::string& target){
-	if (!hasEnergy()){
+	if (!hasEnergy() || isDead()){
 		return;
 	}
 	std::cout << "ClapTrap " << name << " attacks " << target << ", causing " << attack_damage << " points of damage!" << std::endl;
@@ -52,6 +60,9 @@ void ClapTrap::attack(const std::string& target){
 };
 
 void ClapTrap::takeDamage(unsigned int amount){
+	if (isDead()){
+		return;
+	}
 	if (amount > getHitPoints()){
 		amount = getHitPoints();
 	}
@@ -66,7 +77,7 @@ void ClapTrap::takeDamage(unsigned int amount){
 };
 
 void ClapTrap::beRepaired(unsigned int amount){
-	if (!hasEnergy()){
+	if (!hasEnergy() || isDead()){
 		return;
 	}
 	std::cout << "ClapTrap " << name << " is repaired for " << amount << " hit points!" << std::endl;
