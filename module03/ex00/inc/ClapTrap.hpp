@@ -15,6 +15,7 @@ class ClapTrap
 		void			attack(const std::string& target);
 		void			takeDamage(unsigned int amount);
 		void			beRepaired(unsigned int amount);
+		void			printStatus(void);
 
 		// Getters and Setters
 		std::string		getName(void);
@@ -34,7 +35,6 @@ class ClapTrap
 
 		bool			hasEnergy(void);
 		bool			isDead(void);
-		void			printStatus(void);
 };
 
 #endif
