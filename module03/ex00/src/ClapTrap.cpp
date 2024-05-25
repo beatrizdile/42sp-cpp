@@ -4,7 +4,9 @@ ClapTrap::ClapTrap() : name(), hit_points(10), energy_points(10), attack_damage(
 	std::cout << "Default constructor called" << std::endl;
 }
 
-ClapTrap::ClapTrap(std::string name) : name(name), hit_points(10), energy_points(10), attack_damage(0){};
+ClapTrap::ClapTrap(std::string name) : name(name), hit_points(10), energy_points(10), attack_damage(0){
+	std::cout << "Constructor called" << std::endl;
+};
 
 ClapTrap::ClapTrap(ClapTrap& copy){
 	std::cout << "Copy constructor called" << std::endl;
