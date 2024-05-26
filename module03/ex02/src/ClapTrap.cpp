@@ -72,9 +72,7 @@ void ClapTrap::takeDamage(unsigned int amount){
 	}
 	std::cout << getName() << " takes " << amount << " points of damage!" << std::endl;
 	setHitPoints(getHitPoints() - amount);
-	if (getHitPoints() == 0){
-		std::cout << getName() << " is dead!" << std::endl;
-	}
+	isDead();
 };
 
 void ClapTrap::beRepaired(unsigned int amount){

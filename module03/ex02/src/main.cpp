@@ -20,4 +20,5 @@ int main(void)
 	bea.takeDamage(10);
 	bea.attack("the dummy");
 	bea.beRepaired(3);
+	bea.highFivesGuys();
 }

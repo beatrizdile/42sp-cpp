@@ -29,5 +29,8 @@ FragTrap::~FragTrap() {
 }
 
 void FragTrap::highFivesGuys(void){
+	if (isDead() || !hasEnergy()){
+		return;
+	}
 	std::cout << "FragTrap " << getName() << " requests a high five!" << std::endl;
 };
