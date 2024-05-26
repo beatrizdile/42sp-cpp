@@ -27,13 +27,12 @@ class ClapTrap
 		void			setEnergyPoints(int energy_points);
 		void			setAttackDamage(int attack_damage);
 
-	private:
+	protected:
 		std::string		name;
 		unsigned int	hit_points;
 		int				energy_points;
 		int				attack_damage;
 
-	protected:
 		bool			hasEnergy(void);
 		bool			isDead(void);
 };
