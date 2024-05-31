@@ -21,11 +21,15 @@ Animal& Animal::operator=(Animal& other){
 	return *this;
 };
 
+void Animal::makeSound() const{
+	std::cout << "Animal sound" << std::endl;
+};
+
 Animal::~Animal() {
 	std::cout << "Animal destructor called" << std::endl;
 }
 
-std::string Animal::getType(){
+std::string Animal::getType() const{
 	return type;
 };
 

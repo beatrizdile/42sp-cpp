@@ -1,12 +1,7 @@
 #include "Cat.hpp"
 
-Cat::Cat(){
+Cat::Cat() : Animal("Cat"){
 	std::cout << "Cat default constructor called" << std::endl;
-	setType("Cat");
-}
-
-Cat::Cat(std::string type) : Animal(type){
-	std::cout << "Cat constructor called" << std::endl;
 }
 
 Cat::Cat(Cat& copy) : Animal(copy){
@@ -25,6 +20,6 @@ Cat::~Cat(){
 	std::cout << "Cat destructor called" << std::endl;
 }
 
-void Cat::makeSound(){
+void Cat::makeSound() const{
 	std::cout << "Meow Meow" << std::endl;
 }
