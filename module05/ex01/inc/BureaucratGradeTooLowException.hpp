@@ -3,12 +3,10 @@
 
 #include <iostream>
 
-class bureaucratGradeTooLowException: public std::exception
+class BureaucratGradeTooLowException: public std::exception
 {
 	public:
-		virtual const char* what() const throw(){
-			return "Bureaucrat::GradeTooLowException";
-		};
+		virtual const char* what() const throw();
 };
 
 #endif

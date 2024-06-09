@@ -1,4 +1,6 @@
 #include "Bureaucrat.hpp"
+#include "BureaucratGradeTooHighException.hpp"
+#include "BureaucratGradeTooLowException.hpp"
 
 int main(void) 
 {
@@ -9,9 +11,20 @@ int main(void)
 	std::cout << bea << std::endl;
 
 
-	std::cout << std::endl << "----Bureaucrat with a grade too high and too low----" << std::endl;
-	Bureaucrat gi("Giovana", 151);
-	Bureaucrat paulo("Paulo", 0);
+	std::cout << std::endl << "----Bureaucrat with grades too high & too low----" << std::endl;
+	try
+	{
+		// Bureaucrat gi("Giovana", 151);
+		// Bureaucrat paulo("Paulo", 0);
+	}
+	catch(BureaucratGradeTooHighException &e)
+	{
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
+	}
+	catch(BureaucratGradeTooLowException &e)
+	{
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
+	}
 
 
 	std::cout << std::endl << "----Copy constructor & assignment operator----" << std::endl;
@@ -23,8 +36,19 @@ int main(void)
 
 
 	std::cout << std::endl << "----Invalid increment & decrement----" << std::endl;
-	rods.incrementGrade();
-	bea.decrementGrade();
+	try
+	{
+		// rods.incrementGrade();
+		// bea.decrementGrade();
+	}
+	catch(BureaucratGradeTooHighException &e)
+	{
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
+	}
+	catch(BureaucratGradeTooLowException &e)
+	{
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
+	}
 
 
 	std::cout << std::endl << "-------Valid increments & decrements-------" << std::endl;
