@@ -6,7 +6,7 @@ BureaucratGrade::BureaucratGrade(){};
 
 BureaucratGrade::~BureaucratGrade(){};
 
-void BureaucratGrade::bureaucratGradeException(int grade){
+void BureaucratGrade::checkBureaucratGradeException(int grade){
 	if (grade < 1)
 		throw bureaucratGradeTooHighException();
 	else if (grade > 150)

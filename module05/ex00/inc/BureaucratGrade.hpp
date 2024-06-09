@@ -6,7 +6,7 @@ class BureaucratGrade
 	public:
 		BureaucratGrade();
 		~BureaucratGrade();
-		static void bureaucratGradeException(int grade);
+		static void checkBureaucratGradeException(int grade);
 };
 
 #endif

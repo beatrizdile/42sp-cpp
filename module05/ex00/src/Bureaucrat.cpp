@@ -7,17 +7,26 @@ Bureaucrat::Bureaucrat(std::string const name, int grade) : _name(name)
 {
 	try
 	{
-		BureaucratGrade::bureaucratGradeException(grade);
+		BureaucratGrade::checkBureaucratGradeException(grade);
 		this->_grade = grade;
 	} 
 	catch (bureaucratGradeTooHighException &e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
 	}
 	catch (bureaucratGradeTooLowException &e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
 	}
+};
+
+Bureaucrat::Bureaucrat(Bureaucrat& copy) : _name(copy.getName()), _grade(copy.getGrade()) {};
+
+Bureaucrat& Bureaucrat::operator=(Bureaucrat& other){
+	if (this != &other){
+		this->_grade = other.getGrade();
+	}
+	return *this;
 };
 
 Bureaucrat::~Bureaucrat() {};
@@ -33,34 +42,34 @@ int Bureaucrat::getGrade() const {
 void Bureaucrat::incrementGrade() {
 	try
 	{
-		BureaucratGrade::bureaucratGradeException(_grade - 1);
+		BureaucratGrade::checkBureaucratGradeException(_grade - 1);
 		if (this->_grade > 1)
 			this->_grade--;
 	}
 	catch (bureaucratGradeTooHighException &e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
 	}
 	catch (bureaucratGradeTooLowException &e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
 	}
 };
 
 void Bureaucrat::decrementGrade() {
 	try
 	{
-		BureaucratGrade::bureaucratGradeException(_grade + 1);
+		BureaucratGrade::checkBureaucratGradeException(_grade + 1);
 		if (this->_grade < 150)
 			this->_grade++;
 	}
 	catch (bureaucratGradeTooHighException &e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
 	}
 	catch (bureaucratGradeTooLowException &e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Bureaucrat::" << e.what() << std::endl;
 	}
 };
 

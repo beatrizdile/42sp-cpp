@@ -7,7 +7,7 @@ class bureaucratGradeTooLowException: public std::exception
 {
 	public:
 		virtual const char* what() const throw(){
-			return "Bureaucrat::GradeTooLowException";
+			return "GradeTooLowException";
 		};
 };
 
