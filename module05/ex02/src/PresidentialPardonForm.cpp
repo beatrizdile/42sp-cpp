@@ -4,9 +4,9 @@
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 
-PresidentialPardonForm::PresidentialPardonForm() : AForm("Presidential Pardon", gradeToSign, gradeToExecute){};
+PresidentialPardonForm::PresidentialPardonForm() : AForm("Presidential Pardon", 25, 5){};
 
-PresidentialPardonForm::PresidentialPardonForm(std::string const target) : _target(target) {};
+PresidentialPardonForm::PresidentialPardonForm(std::string const target) : AForm("Presidential Pardon", 25, 5), _target(target) {};
 
 PresidentialPardonForm::PresidentialPardonForm(PresidentialPardonForm& copy) {
 	this->_target = copy._target;
@@ -22,5 +22,5 @@ PresidentialPardonForm& PresidentialPardonForm::operator=(PresidentialPardonForm
 PresidentialPardonForm::~PresidentialPardonForm() {};
 
 void PresidentialPardonForm::action() const {
-	std::cout << this->_target << " has been pardoned by Zafod Beeblebrox" << std::endl;
+	std::cout << this->_target << " has been pardoned by Zaphod Beeblebrox" << std::endl;
 };
