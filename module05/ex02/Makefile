@@ -4,8 +4,9 @@ FLAGS 			= -Wall -Wextra -Werror -std=c++98
 VALGRIND 		= valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 SRC 			= $(wildcard src/*.cpp)
+SRC				+= $(wildcard src/exception/*.cpp)
 INCLUDE_FILES 	= $(wildcard inc/*.hpp)
-INCLUDE_FLAG 	= -Iinc
+INCLUDE_FLAG 	= -Iinc -Iinc/exception
 
 all: $(NAME)
 

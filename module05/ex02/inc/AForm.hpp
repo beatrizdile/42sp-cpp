@@ -12,7 +12,6 @@ class AForm
 		const int			_gradeToSign;
 		const int			_gradeToExecute;
 		bool				_isSigned;
-		std::string			_target;
 	public:
 		AForm();
 		AForm(std::string name, int gradeToSign, int gradeToExecute);

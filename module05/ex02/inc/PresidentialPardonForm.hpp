@@ -4,11 +4,12 @@
 #include <iostream>
 
 #include "AForm.hpp"
-class PresidentialPardonForm: public AForm
+class PresidentialPardonForm : public AForm
 {
 	private:
 		static const unsigned char gradeToSign = 25;
 		static const unsigned char gradeToExecute = 5;
+		std::string				   _target;
 	public:
 		PresidentialPardonForm();
 		PresidentialPardonForm(std::string const target);
@@ -16,7 +17,6 @@ class PresidentialPardonForm: public AForm
 		PresidentialPardonForm& operator=(PresidentialPardonForm& other);
 		~PresidentialPardonForm();
 
-		void execute(Bureaucrat const & executor) const;
 		void action() const;
 };
 

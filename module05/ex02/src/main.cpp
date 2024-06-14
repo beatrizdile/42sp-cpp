@@ -1,8 +1,8 @@
 #include "Bureaucrat.hpp"
-#include "AForm.hpp"
-#include "BureaucratGradeTooHighException.hpp"
-#include "BureaucratGradeTooLowException.hpp"
 #include "PresidentialPardonForm.hpp"
+#include "FormAlreadySignedException.hpp"
+#include "FormNotSignedException.hpp"
+#include "BureaucratGradeTooLowException.hpp"
 
 int main(void) 
 {	
@@ -10,7 +10,11 @@ int main(void)
 
 	PresidentialPardonForm form("beatriz");
 	Bureaucrat bureaucrat("bureaucrat", 1);
-	form.execute(bureaucrat);
+	try{
+		form.execute(bureaucrat);
+	} catch(const std::exception& e){
+		std::cerr << e.what() << std::endl;
+	}
 
 	return 0;
 }

@@ -6,7 +6,7 @@
 
 PresidentialPardonForm::PresidentialPardonForm() : AForm("Presidential Pardon", gradeToSign, gradeToExecute){};
 
-PresidentialPardonForm::PresidentialPardonForm(std::string const target) : _target(_target) {};
+PresidentialPardonForm::PresidentialPardonForm(std::string const target) : _target(target) {};
 
 PresidentialPardonForm::PresidentialPardonForm(PresidentialPardonForm& copy) {
 	this->_target = copy._target;
