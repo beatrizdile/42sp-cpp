@@ -4,9 +4,9 @@
 #include "Bureaucrat.hpp"
 #include "AForm.hpp"
 
-PresidentialPardonForm::PresidentialPardonForm() : AForm("Presidential Pardon", 25, 5){};
+PresidentialPardonForm::PresidentialPardonForm() : AForm("Presidential Pardon", PRESIDENTIALPARDON_GRADE_TO_SIGN, PRESIDENTIALPARDON_GRADE_TO_EXEC){};
 
-PresidentialPardonForm::PresidentialPardonForm(std::string const target) : AForm("Presidential Pardon", 25, 5), _target(target) {};
+PresidentialPardonForm::PresidentialPardonForm(std::string const target) : AForm("Presidential Pardon", PRESIDENTIALPARDON_GRADE_TO_SIGN, PRESIDENTIALPARDON_GRADE_TO_EXEC), _target(target) {};
 
 PresidentialPardonForm::PresidentialPardonForm(PresidentialPardonForm& copy) {
 	this->_target = copy._target;

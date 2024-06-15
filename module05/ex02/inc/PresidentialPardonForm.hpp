@@ -2,8 +2,11 @@
 #define PRESIDENTIALPARDONFORM_HPP
 
 #include <iostream>
-
 #include "AForm.hpp"
+
+#define PRESIDENTIALPARDON_GRADE_TO_SIGN 25
+#define PRESIDENTIALPARDON_GRADE_TO_EXEC 5
+
 class PresidentialPardonForm : public AForm
 {
 	private:

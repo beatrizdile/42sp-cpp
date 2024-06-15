@@ -41,6 +41,18 @@ void Bureaucrat::signForm(AForm& form){
 	}
 };
 
+void Bureaucrat::executeForm(AForm const & form){
+	try
+	{
+		form.execute(*this);
+		std::cout << _name << " executed " << form.getName() << std::endl;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << _name << " couldn't execute " << form.getName() << " because " << e.what() << std::endl;
+	}
+};
+
 void Bureaucrat::incrementGrade() {
 	Bureaucrat::checkBureaucratGradeException(_grade - 1);
 	if (this->_grade > 1)

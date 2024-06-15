@@ -8,31 +8,44 @@ int main(void)
 {
 	// AForm form("form", 1, 1); // Abstract class can't be instantiated
 
+	// PresidentialPardonForm --------------------------------------------------
 	PresidentialPardonForm form("Target");
-	Bureaucrat great("bureaucrat", 1);
-	Bureaucrat low("bureaucrat", 26);
+	Bureaucrat greatBureaucrat("greatBureaucrat", 1);
+	Bureaucrat lowBureaucrat("lowBureaucrat", 26);
 
-	low.signForm(form);
+	lowBureaucrat.signForm(form); // Bureaucrat grade is too low to sign the form
 	try
 	{
-		form.beSigned(low); // Bureaucrat grade is too low to sign the form
+		form.beSigned(lowBureaucrat); // Bureaucrat grade is too low to sign the form
 	}
 	catch(std::exception& e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Exception: " << e.what() << std::endl;
 	}
 
-	form.beSigned(great);
+
+	lowBureaucrat.executeForm(form); // Form not signed yet
 	try
 	{
-		form.execute(low); // Bureaucrat grade is too low to execute the form
+		form.execute(greatBureaucrat); // Form not signed yet
 	}
 	catch(std::exception& e)
 	{
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Exception: " << e.what() << std::endl;
 	}
 
-	form.execute(great);
+
+	form.beSigned(greatBureaucrat);
+	try
+	{
+		form.execute(lowBureaucrat); // Bureaucrat grade is too low to execute the form
+	}
+	catch(std::exception& e)
+	{
+		std::cerr << "Exception: " << e.what() << std::endl;
+	}
+	form.execute(greatBureaucrat);
+	// -------------------------------------------------------------------------
 
 	return 0;
 }

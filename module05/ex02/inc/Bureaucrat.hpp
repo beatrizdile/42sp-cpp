@@ -17,6 +17,7 @@ class Bureaucrat
 
 		static void 		checkBureaucratGradeException(int grade);
 		void 				signForm(class AForm& form);
+		void				executeForm(AForm const & form);
 	
 		std::string const 	getName() const;
 		int 				getGrade() const;
