@@ -12,6 +12,7 @@ class AForm
 		const int			_gradeToSign;
 		const int			_gradeToExecute;
 		bool				_isSigned;
+
 	public:
 		AForm();
 		AForm(std::string name, int gradeToSign, int gradeToExecute);
@@ -19,7 +20,6 @@ class AForm
 		AForm& operator=(AForm& other);
 		~AForm();
 
-		virtual void	action() const = 0;
 		void			execute(Bureaucrat const & executor) const;
 		void			beSigned(class Bureaucrat& bureaucrat);
 
@@ -27,6 +27,9 @@ class AForm
 		int				getGradeToSign() const;
 		int				getGradeToExecute() const;
 		bool			getIsSigned() const;
+
+	protected:
+		virtual void	action() const = 0;
 };
 
 std::ostream& operator<<(std::ostream &o, AForm const& form);

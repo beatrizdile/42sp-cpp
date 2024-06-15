@@ -1,5 +1,7 @@
 #include "Bureaucrat.hpp"
 #include "PresidentialPardonForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "ShrubberyCreationForm.hpp"
 #include "FormAlreadySignedException.hpp"
 #include "FormNotSignedException.hpp"
 #include "BureaucratGradeTooLowException.hpp"
@@ -8,10 +10,10 @@ int main(void)
 {
 	// AForm form("form", 1, 1); // Abstract class can't be instantiated
 
-	// PresidentialPardonForm --------------------------------------------------
+	// Form --------------------------------------------------------------------
 	PresidentialPardonForm form("Target");
 	Bureaucrat greatBureaucrat("greatBureaucrat", 1);
-	Bureaucrat lowBureaucrat("lowBureaucrat", 26);
+	Bureaucrat lowBureaucrat("lowBureaucrat", 150);
 
 	lowBureaucrat.signForm(form); // Bureaucrat grade is too low to sign the form
 	try
@@ -34,8 +36,8 @@ int main(void)
 		std::cerr << "Exception: " << e.what() << std::endl;
 	}
 
-
-	form.beSigned(greatBureaucrat);
+	greatBureaucrat.signForm(form);
+	lowBureaucrat.executeForm(form);
 	try
 	{
 		form.execute(lowBureaucrat); // Bureaucrat grade is too low to execute the form
@@ -44,7 +46,7 @@ int main(void)
 	{
 		std::cerr << "Exception: " << e.what() << std::endl;
 	}
-	form.execute(greatBureaucrat);
+	greatBureaucrat.executeForm(form);
 	// -------------------------------------------------------------------------
 
 	return 0;

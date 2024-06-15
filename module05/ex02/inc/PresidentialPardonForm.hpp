@@ -18,6 +18,7 @@ class PresidentialPardonForm : public AForm
 		PresidentialPardonForm& operator=(PresidentialPardonForm& other);
 		~PresidentialPardonForm();
 
+	protected:
 		void action() const;
 };
 
