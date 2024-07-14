@@ -2,6 +2,10 @@
 #define SCALARCONVERTER_HPP
 
 #include <iostream>
+#include <math.h>
+#include <cstdlib>
+#include <iomanip>
+#include <limits>
 
 class ScalarConverter
 {
