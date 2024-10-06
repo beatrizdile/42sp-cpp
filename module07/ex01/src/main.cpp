@@ -15,5 +15,13 @@ int main()
 	std::string arrStr[] = {"one", "two", "three", "four", "five"};
 	::iter(arrStr, 5, ::printStr);
 
+	std::cout << "-------------------------------------------" << std::endl;
+
+	// printing elements
+	::iter(arrInt, 5, ::printElement);
+	::iter(doubleArr, 5, ::printElement);
+	::iter(arrStr, 5, ::printElement);
+
+
 	return (0);
 }

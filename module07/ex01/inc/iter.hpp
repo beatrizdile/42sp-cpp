@@ -22,4 +22,9 @@ void printDouble(double x) {
 	std::cout << "Double: " << x << std::endl;
 }
 
+template <typename T>
+void printElement(T element) {
+    std::cout << "Element: " << element << std::endl;
+}
+
 #endif
