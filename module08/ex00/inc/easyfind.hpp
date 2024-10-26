@@ -6,12 +6,13 @@
 #include <iostream>
 
 template <typename Container>
-typename Container::const_iterator easyfind(const Container& container, int num) {
-    for (typename Container::const_iterator it = container.begin(); it != container.end(); ++it) {
-        if (*it == num)
-			return it;
-    }
-    throw std::out_of_range("Element not found in container");
+typename Container::const_iterator easyFind(const Container& container, int num) {
+    typename Container::const_iterator it;
+    
+    it = std::find(container.begin(), container.end(), num);
+    if (it == container.end())
+        throw std::out_of_range("Element not found in container");
+    return it;
 }
 
 #endif
