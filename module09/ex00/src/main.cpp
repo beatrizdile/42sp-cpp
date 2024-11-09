@@ -4,7 +4,7 @@ int main(int argc, char* argv[])
 {
 	// Your program must take a file as argument.
 	if (argc != 2) {
-		std::cerr << "Usage: ./bitcoin [filename]" << std::endl;
+		std::cerr << "Error: could not open file." << std::endl;
 		return 1;
 	}
 
