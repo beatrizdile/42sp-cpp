@@ -202,10 +202,9 @@ void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
 				continue;
 			}
 
-			// Output the extracted date and value
-			std::cout << "findClosestDate: " << findClosestDate(_database, date) << std::endl;			
+			calculateExchange(_database, date, value);
         } else {
-			double value;
+			float value;
             std::istringstream floatStream(valueStr);
             if (!(floatStream >> value) || !floatStream.eof()) {
                 std::cerr << "Error: invalid number => " << valueStr << std::endl;
@@ -217,18 +216,18 @@ void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
 				continue;
 			}
 
-			// Output the extracted date and value
-			std::cout << "findClosestDate: " << findClosestDate(_database, date) << std::endl;			
+			calculateExchange(_database, date, value);			
         }
 	}
 };
 
-std::string BitcoinExchange::findClosestDate(const std::map<std::string, int>& dateMap, const std::string& targetDate) {
+void BitcoinExchange::calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, int value) {
     // use lower_bound to find the first date not less than the targetDate
     std::map<std::string, int>::const_iterator it = dateMap.lower_bound(targetDate);
+    (void)value;
 
     if (it == dateMap.begin()) {
-        return it->first;
+        return ;
     }
 
     // move iterator one step back if it's past the targetDate
@@ -236,10 +235,19 @@ std::string BitcoinExchange::findClosestDate(const std::map<std::string, int>& d
         --it;
     }
 
-    return it->first;
 }
 
-// PARSING input file
-// check if date is in a valid format
-// check if date is valid
-// check if value is a float or a positive integer, between 0 and 1000
+void BitcoinExchange::calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, float value) {
+    // use lower_bound to find the first date not less than the targetDate
+    std::map<std::string, int>::const_iterator it = dateMap.lower_bound(targetDate);
+    (void)value;
+    if (it == dateMap.begin()) {
+        return ;
+    }
+
+    // move iterator one step back if it's past the targetDate
+    if (it == dateMap.end() || it->first > targetDate) {
+        --it;
+    }
+}
+

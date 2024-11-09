@@ -14,7 +14,8 @@ class BitcoinExchange
 {
     private:
         BitcoinExchange();
-        std::string findClosestDate(const std::map<std::string, int>& dateMap, const std::string& targetDate);
+        void calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, int value);
+        void calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, float value);
         void generateBitcoinExchange(const std::string &filename);
         std::map<std::string, int> _database;
     public:
