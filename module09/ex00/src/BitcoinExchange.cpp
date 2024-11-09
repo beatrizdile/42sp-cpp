@@ -103,6 +103,23 @@ static bool isInteger(const std::string &valueStr) {
     return true;
 }
 
+template <typename T>
+static void calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, T value) {
+    // use lower_bound to find the first date not less than the targetDate
+    std::map<std::string, int>::const_iterator it = dateMap.lower_bound(targetDate);
+    (void)value;
+
+    if (it == dateMap.begin()) {
+        return ;
+    }
+
+    // move iterator one step back if it's past the targetDate
+    if (it == dateMap.end() || it->first > targetDate) {
+        --it;
+    }
+
+}
+
 BitcoinExchange::BitcoinExchange() : _database() {
 };
 
@@ -220,34 +237,3 @@ void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
         }
 	}
 };
-
-void BitcoinExchange::calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, int value) {
-    // use lower_bound to find the first date not less than the targetDate
-    std::map<std::string, int>::const_iterator it = dateMap.lower_bound(targetDate);
-    (void)value;
-
-    if (it == dateMap.begin()) {
-        return ;
-    }
-
-    // move iterator one step back if it's past the targetDate
-    if (it == dateMap.end() || it->first > targetDate) {
-        --it;
-    }
-
-}
-
-void BitcoinExchange::calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, float value) {
-    // use lower_bound to find the first date not less than the targetDate
-    std::map<std::string, int>::const_iterator it = dateMap.lower_bound(targetDate);
-    (void)value;
-    if (it == dateMap.begin()) {
-        return ;
-    }
-
-    // move iterator one step back if it's past the targetDate
-    if (it == dateMap.end() || it->first > targetDate) {
-        --it;
-    }
-}
-
