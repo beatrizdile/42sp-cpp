@@ -44,6 +44,65 @@ static std::map<std::string, int>& loadDatabase() {
 	return localDatabase;
 }
 
+static bool isLeapYear(int year) {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+static bool isValidDate(const std::string &date) {
+    // Extract year, month, and day from the date string
+    int year, month, day;
+    if (sscanf(date.c_str(), "%d-%d-%d", &year, &month, &day) != 3) {
+        return false;
+    }
+
+    // Check valid year range
+    if (year < 0) return false;
+
+    // Check if month is valid
+    if (month < 1 || month > 12) return false;
+
+    // Define the number of days in each month
+    int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    // Adjust for leap years
+    if (isLeapYear(year)) {
+        daysInMonth[1] = 29;
+    }
+
+    // Check if the day is valid for the given month
+    if (day < 1 || day > daysInMonth[month - 1]) {
+        return false;
+    }
+
+    return true;
+}
+
+static std::string trim(const std::string& str) {
+    if (str.empty())
+        return str;
+
+    std::string result = str;
+    while (!result.empty() && isspace(result[0]))
+        result.erase(0, 1);
+    
+    while (!result.empty() && isspace(result[result.length() - 1]))
+        result.erase(result.length() - 1, 1);
+        
+    return result;
+}
+
+static bool isValidFilePath(const char* path) {
+    struct stat buffer;
+    return (stat(path, &buffer) == 0 && S_ISREG(buffer.st_mode));
+};
+
+static bool isInteger(const std::string &valueStr) {
+    for (std::size_t i = (valueStr[0] == '-') ? 1 : 0; i < valueStr.size(); ++i) {
+        if (!isdigit(valueStr[i])) return false;
+    }
+    return true;
+}
+
 BitcoinExchange::BitcoinExchange() : _database() {
 };
 
@@ -54,7 +113,7 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange &other) : _database() {
 	this->_database = other._database;
 }
 
-BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &other){
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &other) {
 	if (this != &other) {
 		// this->_target = other._target;
 	}
@@ -65,11 +124,103 @@ BitcoinExchange::BitcoinExchange(const std::string &filename) : _database() {
 	// load database
 	this->_database = loadDatabase();
 
-	// read input file
-	readInputFile(filename);
+	// read input file & print output
+	generateBitcoinExchange(filename);
+};
 
-	// create output
-	std::cout << "findClosestDate: " << findClosestDate(_database, "2009-04-20") << std::endl;
+void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
+	// check if file is valid
+	if (!isValidFilePath(filename.c_str())) {
+		throw std::invalid_argument("Error: could not open file.");
+	}
+
+	// open file
+	std::ifstream file;
+	file.open(filename.c_str());
+	if (file.fail()) {
+		throw std::invalid_argument("Error opening file");
+		return;
+	}
+
+	// check if header is valid
+	std::string line;
+    if (!std::getline(file, line)) {
+        std::cout << "Error: empty file" << std::endl;
+        file.close();
+        return;
+    }
+
+    if (trim(line) != "date | value") {
+        file.close();
+		throw std::invalid_argument("Error: first line must be 'date | value'");
+    }
+
+    while (std::getline(file, line)) {
+        std::string date;
+        std::string valueStr;
+
+        // Find the position of the separator '|'
+        std::size_t separatorPos = line.find('|');
+        if (separatorPos == std::string::npos) {
+            std::cerr << "Error: bad input (missing '|') => " << line << std::endl;
+            continue;
+        }
+
+        // Extract the date and value parts
+        date = line.substr(0, separatorPos);
+        valueStr = line.substr(separatorPos + 1);
+
+        // Trim whitespace from date and value parts
+        date = trim(date);
+		valueStr = trim(valueStr);
+
+        // Check if the date format is valid (check for 'YYYY-MM-DD')
+        if (date.size() != 10 || date[4] != '-' || date[7] != '-') {
+            std::cerr << "Error: invalid date format => " << date << std::endl;
+            continue;
+        }
+
+		// Validate that the date is an actual calendar date
+        if (!isValidDate(date)) {
+            std::cerr << "Error: invalid calendar date => " << date << std::endl;
+            continue;
+        }
+
+        // Check if the value is an integer or a decimal
+        if (isInteger(valueStr)) {
+        	int value;
+            std::istringstream intStream(valueStr);
+            int intValue;
+            if (!(intStream >> intValue) || !intStream.eof()) {
+                std::cerr << "Error: invalid number => " << valueStr << std::endl;
+                continue;
+            }
+            value = intValue;
+
+			if (value < 0 || value > 1000) {
+				std::cerr << "Error: invalid number => " << value << std::endl;
+				continue;
+			}
+
+			// Output the extracted date and value
+			std::cout << "findClosestDate: " << findClosestDate(_database, date) << std::endl;			
+        } else {
+			double value;
+            std::istringstream floatStream(valueStr);
+            if (!(floatStream >> value) || !floatStream.eof()) {
+                std::cerr << "Error: invalid number => " << valueStr << std::endl;
+                continue;
+            }
+
+			if (value < 0 || value > 1000) {
+				std::cerr << "Error: invalid number => " << value << std::endl;
+				continue;
+			}
+
+			// Output the extracted date and value
+			std::cout << "findClosestDate: " << findClosestDate(_database, date) << std::endl;			
+        }
+	}
 };
 
 std::string BitcoinExchange::findClosestDate(const std::map<std::string, int>& dateMap, const std::string& targetDate) {
@@ -87,18 +238,6 @@ std::string BitcoinExchange::findClosestDate(const std::map<std::string, int>& d
 
     return it->first;
 }
-
-void BitcoinExchange::readInputFile(const std::string &filename){
-	if (!isValidFile(filename.c_str())) {
-		throw std::invalid_argument("Error: could not open file.");
-	}
-};
-
-bool BitcoinExchange::isValidFile(const char* path) {
-    struct stat buffer;
-    return (stat(path, &buffer) == 0 && S_ISREG(buffer.st_mode));
-};
-
 
 // PARSING input file
 // check if date is in a valid format

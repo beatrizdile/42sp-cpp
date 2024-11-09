@@ -4,16 +4,18 @@
 #include <sys/stat.h>
 #include <stdexcept>
 #include <algorithm>
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <map>
 
 class BitcoinExchange
 {
     private:
         BitcoinExchange();
-        bool isValidFile(const char* path);
         std::string findClosestDate(const std::map<std::string, int>& dateMap, const std::string& targetDate);
-        void readInputFile(const std::string &filename);
+        void generateBitcoinExchange(const std::string &filename);
         std::map<std::string, int> _database;
     public:
         ~BitcoinExchange();
