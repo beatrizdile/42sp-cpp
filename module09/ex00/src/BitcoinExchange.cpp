@@ -14,6 +14,22 @@ static std::string trim(const std::string& str) {
     return result;
 }
 
+static bool isEmptyOrWhitespace(const std::string &line) {
+    // Check if the string is empty
+    if (line.empty()) {
+        return true;
+    }
+
+    // Check if all characters are whitespace
+    for (std::size_t i = 0; i < line.size(); ++i) {
+        if (!std::isspace(static_cast<unsigned char>(line[i]))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 static bool isValidFilePath(const char* path) {
     struct stat buffer;
     return (stat(path, &buffer) == 0 && S_ISREG(buffer.st_mode));
@@ -184,6 +200,9 @@ void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
         std::string date;
         std::string valueStr;
         long double value;
+
+        if (isEmptyOrWhitespace(line))
+            continue;
 
         // Find the position of the separator '|'
         std::size_t separatorPos = line.find('|');
