@@ -19,17 +19,18 @@ static bool isValidFilePath(const char* path) {
     return (stat(path, &buffer) == 0 && S_ISREG(buffer.st_mode));
 };
 
-double stringToDouble(const std::string &str) {
+static long double stringToLongDouble(const std::string &str) {
     std::istringstream stream(str);
-    double result;
+    stream.imbue(std::locale("C")); // Ensure '.' is used as the decimal separator
+    long double result;
     if (stream >> result && stream.eof()) {
         return result;
     }
-    throw std::invalid_argument("Invalid input string");
+    throw std::invalid_argument("Error: invalid number => ");
 }
 
-static std::map<std::string, int>& loadDatabase() {
-	static std::map<std::string, int> localDatabase;
+static std::map<std::string, long double>& loadDatabase() {
+	static std::map<std::string, long double> localDatabase;
     // check if file is valid
 	if (!isValidFilePath("data.csv"))
 		throw std::invalid_argument("Error: could not open database.");
@@ -51,7 +52,6 @@ static std::map<std::string, int>& loadDatabase() {
         file.close();
 		throw std::invalid_argument("Error: first line of database must be 'date,exchange_rate'");
     }
-        std::cout << "-------DATABASE-------" << std::endl;
 
     while (std::getline(file, line)) {
         std::string date;
@@ -71,8 +71,7 @@ static std::map<std::string, int>& loadDatabase() {
         // trim whitespace from date and value parts
         date = trim(date);
         valueStr = trim(valueStr);
-        localDatabase[date] = stringToDouble(valueStr);
-        std::cout << date << " | " << localDatabase[date] << std::endl;
+        localDatabase[date] = stringToLongDouble(valueStr);
     }
 
 	return localDatabase;
@@ -136,21 +135,22 @@ BitcoinExchange::BitcoinExchange(const std::string &filename) : _database() {
 	generateBitcoinExchange(filename);
 };
 
-void BitcoinExchange::calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, double value) {
+void BitcoinExchange::calculateExchange(const std::string& targetDate, long double value) {
     // use lower_bound to find the first date not less than the targetDate
-    std::map<std::string, int>::const_iterator it = dateMap.lower_bound(targetDate);
-    (void)value;
+    std::map<std::string, long double>::const_iterator it = _database.lower_bound(targetDate);
 
-    if (it == dateMap.begin()) {
+    if (it == _database.begin()) {
         return ;
     }
 
     // move iterator one step back if it's past the targetDate
-    if (it == dateMap.end() || it->first > targetDate) {
+    if (it == _database.end() || it->first > targetDate) {
         --it;
     }
 
-    std::cout << targetDate << " | " << it->second << "*" << _database.find(targetDate)->second << std::endl;
+    long double exchangeRate = it->second * value;
+
+    std::cout << targetDate << " => " << value << " = " << exchangeRate << std::endl;
 }
 
 void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
@@ -183,7 +183,7 @@ void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
     while (std::getline(file, line)) {
         std::string date;
         std::string valueStr;
-        double value;
+        long double value;
 
         // Find the position of the separator '|'
         std::size_t separatorPos = line.find('|');
@@ -206,21 +206,27 @@ void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
             continue;
         }
 
-		// Validate that the date is an actual calendar date
+        // Validate that the date is an actual calendar date
         if (!isValidDate(date)) {
             std::cerr << "Error: invalid calendar date => " << date << std::endl;
             continue;
         }
 
-        // make the value into a double
+        // Convert the value string to long double
         std::istringstream doubleStream(valueStr);
-        if (!(doubleStream >> value) || !doubleStream.eof())
+        doubleStream.imbue(std::locale("C")); // Ensure '.' is used as the decimal point
+        if (!(doubleStream >> value) || !doubleStream.eof()) {
             std::cerr << "Error: invalid number => " << valueStr << std::endl;
+            continue;
+        }
 
-        // check if the value is within the desired range
-        if (value < 0 || value > 1000)
-            std::cerr << "Error: invalid number => " << value << std::endl;
+        // Check if the value is within the desired range
+        if (value < 0 || value > 1000) {
+            std::cerr << "Error: invalid number => " << valueStr << std::endl;
+            continue;
+        }
 
-        calculateExchange(_database, date, value);
-	}
+        // Perform the calculation with the long double value
+        calculateExchange(date, value);
+    }
 };

@@ -15,8 +15,8 @@ class BitcoinExchange
     private:
         BitcoinExchange();
         void generateBitcoinExchange(const std::string &filename);
-        void calculateExchange(const std::map<std::string, int>& dateMap, const std::string& targetDate, double value);
-        std::map<std::string, int> _database;
+        void calculateExchange(const std::string& targetDate, long double value);
+        std::map<std::string, long double> _database;
     public:
         ~BitcoinExchange();
         BitcoinExchange(const BitcoinExchange &other);
