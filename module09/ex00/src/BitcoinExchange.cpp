@@ -51,13 +51,13 @@ static std::map<std::string, long double>& loadDatabase() {
 	if (!isValidFilePath("data.csv"))
 		throw std::invalid_argument("Error: could not open database.");
 
-	// open file
+	// Open file
 	std::ifstream file;
 	file.open("data.csv");
 	if (file.fail())
 		throw std::invalid_argument("Error opening file");
 
-	// check if header is valid
+	// Check if header is valid
 	std::string line;
     if (!std::getline(file, line)) {
         std::cout << "Error: empty file" << std::endl;
@@ -73,18 +73,18 @@ static std::map<std::string, long double>& loadDatabase() {
         std::string date;
         std::string valueStr;
 
-        // find the position of the separator ','
+        // Find the position of the separator ','
         std::size_t separatorPos = line.find(',');
         if (separatorPos == std::string::npos) {
             std::cerr << "Error: bad input (missing ',') => " << line << std::endl;
             continue;
         }
 
-        // extract the date and value parts
+        // Extract the date and value parts
         date = line.substr(0, separatorPos);
         valueStr = line.substr(separatorPos + 1);
 
-        // trim whitespace from date and value parts
+        // Trim whitespace from date and value parts
         date = trim(date);
         valueStr = trim(valueStr);
         localDatabase[date] = stringToLongDouble(valueStr);
@@ -98,27 +98,27 @@ static bool isLeapYear(int year) {
 }
 
 static bool isValidDate(const std::string &date) {
-    // extract year, month, and day from the date string
+    // Extract year, month, and day from the date string
     int year, month, day;
     if (sscanf(date.c_str(), "%d-%d-%d", &year, &month, &day) != 3) {
         return false;
     }
 
-    // check valid year range
+    // Check valid year range
     if (year < 0) return false;
 
-    // check if month is valid
+    // Check if month is valid
     if (month < 1 || month > 12) return false;
 
-    // define the number of days in each month
+    // Define the number of days in each month
     int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    // adjust for leap years
+    // Adjust for leap years
     if (isLeapYear(year)) {
         daysInMonth[1] = 29;
     }
 
-    // check if the day is valid for the given month
+    // Check if the day is valid for the given month
     if (day < 1 || day > daysInMonth[month - 1]) {
         return false;
     }
@@ -138,28 +138,28 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange &other) : _database() {
 
 BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &other) {
 	if (this != &other) {
-		// this->_target = other._target;
+		this->_database = other._database;
 	}
 	return *this;
 };
 
 BitcoinExchange::BitcoinExchange(const std::string &filename) : _database() {
-	// load database
+	// Load database
 	this->_database = loadDatabase();
 
-	// read input file & print output
+	// Read input file & print output
 	generateBitcoinExchange(filename);
 };
 
 void BitcoinExchange::calculateExchange(const std::string& targetDate, long double value) {
-    // use lower_bound to find the first date not less than the targetDate
+    // Use lower_bound to find the first date not less than the targetDate
     std::map<std::string, long double>::const_iterator it = _database.lower_bound(targetDate);
 
     if (it == _database.begin()) {
         return ;
     }
 
-    // move iterator one step back if it's past the targetDate
+    // Move iterator one step back if it's past the targetDate
     if (it == _database.end() || it->first > targetDate) {
         --it;
     }
@@ -170,12 +170,12 @@ void BitcoinExchange::calculateExchange(const std::string& targetDate, long doub
 }
 
 void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
-	// check if file is valid
+	// Check if file is valid
 	if (!isValidFilePath(filename.c_str())) {
 		throw std::invalid_argument("Error: could not open file.");
 	}
 
-	// open file
+	// Open file
 	std::ifstream file;
 	file.open(filename.c_str());
 	if (file.fail()) {
@@ -183,7 +183,7 @@ void BitcoinExchange::generateBitcoinExchange(const std::string &filename) {
 		return;
 	}
 
-	// check if header is valid
+	// Check if header is valid
 	std::string line;
     if (!std::getline(file, line)) {
         std::cout << "Error: empty file" << std::endl;
