@@ -1,15 +1,28 @@
-#ifndef PmergeMe_HPP
-#define PmergeMe_HPP
+#ifndef PMERGEME_HPP
+#define PMERGEME_HPP
 
-#include <sys/stat.h>
 #include <stdexcept>
-#include <algorithm>
-#include <fstream>
 #include <iostream>
+#include <vector>
+#include <deque>
+#include <limits>
+#include <cstdlib>
+#include <string>
 #include <sstream>
-#include <string>
-#include <stack>
-#include <string>
+#include <locale>
 
+class PmergeMe {
+	private:
+		PmergeMe();
+		PmergeMe& operator=(PmergeMe const & other);
+		void parseInput(std::string str);
+		std::vector<int> myVector;
+		std::deque<int> myDeque;
+	public:
+		~PmergeMe();
+		PmergeMe(PmergeMe const & other);
+		PmergeMe(std::string str);
+		void print();
+};
 
 #endif
