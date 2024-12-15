@@ -9,7 +9,6 @@ int main(int argc, char* argv[])
 
 	try {
 		PmergeMe pmergeM(argv[1]);
-		pmergeM.print();
 	}
 	catch (std::exception & e){
 		std::cerr << "Error: " << e.what() << std::endl;

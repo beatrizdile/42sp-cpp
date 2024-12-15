@@ -57,9 +57,6 @@ void PmergeMe::parseInput(std::string str) {
 
 	// check if there are only numbers in the array
 	for (std::vector<std::string>::iterator it = array.begin(); it != array.end(); ++it) {
-		std::cout << "*it: " << *it << std::endl;
-
-		// check if entire string contains only digits
 		for (std::string::iterator char_it = it->begin(); char_it != it->end(); ++char_it)
 			if (!isdigit(*char_it))
 				throw std::invalid_argument("Non digit character in string");
@@ -100,6 +97,35 @@ PmergeMe& PmergeMe::operator=(PmergeMe const & other) {
 
 PmergeMe::PmergeMe(std::string str) {
 	parseInput(str);
+	this->print();
+
+	// check if the vector has an odd number of elements, if so, store the straggler
+	// 2 1 4 3 5 8 6 7 10 9 0 -> 0
+	int straggler = -1;
+	if (myVector.size() % 2 != 0) {
+        straggler = myVector.back();
+        myVector.pop_back();
+	}
+
+	// divide the vector into pairs and sort each pair
+	// (2, 1) (4, 3) (5, 8) (6, 7) (10, 9)
+	std::vector<std::pair<int, int> > pairs;
+
+	for (size_t i = 0; i < myVector.size(); i += 2) {
+        if (myVector[i] < myVector[i + 1])
+            pairs.push_back(std::make_pair(myVector[i], myVector[i + 1]));
+        else
+            pairs.push_back(std::make_pair(myVector[i + 1], myVector[i]));
+    }
+
+	// sort all pairs by the second element (which is the greatest one of the pair)
+	// (1, 2) (3, 4) (5, 8) (6, 7) (9, 10)
+	PmergeMe::insertionSort(pairs);
+
+	std::cout << std::endl;
+    for (std::vector<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+        std::cout << "(" << it->first << ", " << it->second << ")" << std::endl;
+    }
 }
 
 void PmergeMe::print() {
