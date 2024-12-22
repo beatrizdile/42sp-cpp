@@ -38,6 +38,25 @@ class PmergeMe {
 				container[previus + 1] = currentValue;
 			}
 		}
+
+		template <typename T>
+		static void jacobsthalSequence(size_t maxIndex, T &container) {
+			if (maxIndex == 1) {
+				container.push_back(1);
+				return;
+			}
+			container.push_back(0);
+			container.push_back(1);
+			size_t i = 2;
+			while (true) {
+				size_t current = container[i - 1] + 2 * container[i - 2];
+				if (current > maxIndex)
+					break;
+				container.push_back(current);
+				i++;
+			}
+			container.erase(container.begin(), container.begin() + 2);
+		}
 };
 
 #endif

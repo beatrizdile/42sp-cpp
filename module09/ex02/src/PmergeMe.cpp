@@ -100,7 +100,7 @@ PmergeMe::PmergeMe(std::string str) {
 	this->print();
 
 	// check if the vector has an odd number of elements, if so, store the straggler
-	// 2 1 4 3 5 8 6 7 10 9 0 -> 0
+	// 10 9 5 8 2 1 6 7 4 3 0 -> [ 0 ]
 	int straggler = -1;
 	if (myVector.size() % 2 != 0) {
         straggler = myVector.back();
@@ -108,7 +108,7 @@ PmergeMe::PmergeMe(std::string str) {
 	}
 
 	// divide the vector into pairs and sort each pair
-	// (2, 1) (4, 3) (5, 8) (6, 7) (10, 9)
+	// (9, 10) (5, 8) (1, 2) (6, 7) (3, 4)
 	std::vector<std::pair<int, int> > pairs;
 
 	for (size_t i = 0; i < myVector.size(); i += 2) {
@@ -118,18 +118,48 @@ PmergeMe::PmergeMe(std::string str) {
             pairs.push_back(std::make_pair(myVector[i + 1], myVector[i]));
     }
 
+	std::cout << "pairs: ";
+	for (std::vector<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it)
+		std::cout << "(" << it->first << ", " << it->second << ")";
+	std::cout << std::endl;
+
+	// this is the insertion part of the algorithm
 	// sort all pairs by the second element (which is the greatest one of the pair)
-	// (1, 2) (3, 4) (5, 8) (6, 7) (9, 10)
+	// (1, 2) (3, 4) (6, 7) (5, 8) (9, 10)
 	PmergeMe::insertionSort(pairs);
 
+	std::cout << "pairs: ";
+	for (std::vector<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it)
+		std::cout << "(" << it->first << ", " << it->second << ")";
 	std::cout << std::endl;
-    for (std::vector<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
-        std::cout << "(" << it->first << ", " << it->second << ")" << std::endl;
+	
+
+	// rebuild the vector that contains all weakest numbers of each pair
+    myVector.clear();
+    myVector.reserve((pairs.size() * 2) + (straggler != -1 ? 1 : 0)); // adding extra space for straggler if needed
+    for (size_t i = 0; i < pairs.size(); i++) {
+        myVector.push_back(pairs[i].first);
     }
+
+	this->print();
+	
+	// generate the jacobsthal sequence
+	// [0, 1, 1, 3, 5, 11, 21, 43, 85, 171]
+
+	// add any missing indexes in the jacobsthal sequence
+	// [1, 3, 2, 5, 4, 11, 10, 9, 8, 7, 6, 21, 20, 19, 18 43, 85, 171]
+
+	// this is the merge part of the algorithm
+	// access the pairs based on the generated jacobsthal sequence
+	// insert the strongest number of the pair into our vector using binary search
+
+	// if there's a straggler, we also insert it using binary search
+
 }
 
 void PmergeMe::print() {
 	std::cout << "Before: ";
 	for (std::vector<int>::iterator it = myVector.begin(); it != myVector.end(); ++it)
 		std::cout << *it << " ";
+	std::cout << std::endl;
 }
