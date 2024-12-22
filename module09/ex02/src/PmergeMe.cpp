@@ -1,5 +1,67 @@
 #include "PmergeMe.hpp"
 
+void removeDuplicates(std::vector<size_t>& sequence) {
+    std::sort(sequence.begin(), sequence.end());
+    std::vector<size_t>::iterator newEnd = std::unique(sequence.begin(), sequence.end());
+    sequence.erase(newEnd, sequence.end());
+}
+
+// static void fillGaps(std::vector<size_t>& sequence) {
+//     std::vector<size_t> result;
+
+//     if (!sequence.empty()) {
+//         result.push_back(sequence[0]);
+//     }
+
+//     for (size_t i = 1; i < sequence.size(); ++i) {
+//         size_t current = sequence[i];
+//         size_t previous = sequence[i-1];
+
+//         if (current - previous > 1) {
+//             for (size_t j = current - 1; j > previous; --j) {
+//                 result.push_back(j);
+//             }
+//         }
+//         result.push_back(current);
+//     }
+
+//     sequence = result;
+// }
+
+static std::vector<size_t> generateJacobsthalUpToValue(size_t maxValue) {
+	std::vector<size_t> sequence;
+
+	if (maxValue < 0) {
+		return sequence;
+	}
+
+	sequence.push_back(0);
+
+	if (maxValue < 1) {
+		return sequence;
+	}
+
+	sequence.push_back(1);
+
+	// generate numbers until we exceed maxValue
+	bool addedNew = true;
+	while (addedNew) {
+		addedNew = false;
+
+		size_t next = sequence[sequence.size() - 1] + 2 * sequence[sequence.size() - 2];
+
+		if (next <= maxValue) {
+			sequence.push_back(next);
+			addedNew = true;
+		}
+	}
+
+	removeDuplicates(sequence);
+	// fillGaps(sequence);
+
+	return sequence;
+}
+
 static std::string trim(const std::string& str) {
     if (str.empty())
         return str;
@@ -7,10 +69,10 @@ static std::string trim(const std::string& str) {
     std::string result = str;
     while (!result.empty() && isspace(result[0]))
         result.erase(0, 1);
-    
+
     while (!result.empty() && isspace(result[result.length() - 1]))
         result.erase(result.length() - 1, 1);
-        
+
     return result;
 }
 
@@ -24,7 +86,7 @@ static std::vector<std::string> split(const std::string& str, char delimiter) {
         if (end > start) {
             result.push_back(str.substr(start, end - start));
         }
-        
+
         start = end + 1;
         end = str.find(delimiter, start);
     }
@@ -97,6 +159,8 @@ PmergeMe& PmergeMe::operator=(PmergeMe const & other) {
 
 PmergeMe::PmergeMe(std::string str) {
 	parseInput(str);
+
+	std::cout << "Before: ";
 	this->print();
 
 	// check if the vector has an odd number of elements, if so, store the straggler
@@ -132,7 +196,6 @@ PmergeMe::PmergeMe(std::string str) {
 	for (std::vector<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it)
 		std::cout << "(" << it->first << ", " << it->second << ")";
 	std::cout << std::endl;
-	
 
 	// rebuild the vector that contains all weakest numbers of each pair
     myVector.clear();
@@ -141,10 +204,17 @@ PmergeMe::PmergeMe(std::string str) {
         myVector.push_back(pairs[i].first);
     }
 
+	std::cout << "Weakest: ";
 	this->print();
-	
+
 	// generate the jacobsthal sequence
 	// [0, 1, 1, 3, 5, 11, 21, 43, 85, 171]
+	std::vector<size_t> jacobsthal = generateJacobsthalUpToValue(200);
+	std::cout << "jacobsthal: ";
+    for (size_t i = 0; i < jacobsthal.size(); ++i) {
+        std::cout << jacobsthal[i] << " ";
+    }
+    std::cout << std::endl;
 
 	// add any missing indexes in the jacobsthal sequence
 	// [1, 3, 2, 5, 4, 11, 10, 9, 8, 7, 6, 21, 20, 19, 18 43, 85, 171]
@@ -154,11 +224,9 @@ PmergeMe::PmergeMe(std::string str) {
 	// insert the strongest number of the pair into our vector using binary search
 
 	// if there's a straggler, we also insert it using binary search
-
 }
 
 void PmergeMe::print() {
-	std::cout << "Before: ";
 	for (std::vector<int>::iterator it = myVector.begin(); it != myVector.end(); ++it)
 		std::cout << *it << " ";
 	std::cout << std::endl;
