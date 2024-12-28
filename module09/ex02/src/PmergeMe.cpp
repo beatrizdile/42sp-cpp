@@ -20,7 +20,6 @@ static std::vector<std::string> split(const std::string& str, char delimiter) {
     std::string::size_type end = str.find(delimiter);
 
     while (end != std::string::npos) {
-        // only push back non-empty substrings
         if (end > start) {
             result.push_back(str.substr(start, end - start));
         }
@@ -29,7 +28,6 @@ static std::vector<std::string> split(const std::string& str, char delimiter) {
         end = str.find(delimiter, start);
     }
 
-    // only push back the last substring if it's not empty
     if (start < str.length()) {
         result.push_back(str.substr(start));
     }
@@ -74,6 +72,7 @@ void PmergeMe::parseInput(std::string str) {
 	for (std::vector<std::string>::iterator it = array.begin(); it != array.end(); ++it) {
 		int num = stringToInt(*it);
 		this->myVector.push_back(num);
+		this->myDeque.push_back(num);
 	}
 }
 
@@ -177,12 +176,47 @@ PmergeMe& PmergeMe::operator=(PmergeMe const & other) {
 	return *this;
 }
 
+void PmergeMe::printVector() {
+	for (std::vector<int>::iterator it = myVector.begin(); it != myVector.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+}
+
+void PmergeMe::printDeque() {
+	for (std::deque<int>::iterator it = myDeque.begin(); it != myDeque.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+}
+
 PmergeMe::PmergeMe(std::string str) {
+	// TODO: sorting when we only have one, two, three and four values
+
 	parseInput(str);
 
-	std::cout << "Before: ";
-	this->print();
+	std::cout << "Vector before: ";
+	this->printVector();
+	clock_t start = clock();
+	PmergeMe::sortingVector();
+	clock_t end = clock();
+	std::cout << "Vector after: ";
+	this->printVector();
+	double milliseconds = static_cast<double>(end - start) * 1000.0 / CLOCKS_PER_SEC;
+	std::cout << "Time to process a range of " << this->myVector.size() << " elements with std::vector :" << milliseconds << " milliseconds" << std::endl;
 
+	std::cout << std::endl;
+
+	std::cout << "Deque before: ";
+	this->printDeque();
+	start = clock();
+	PmergeMe::sortingDeque();
+	end = clock();
+	std::cout << "Deque after: ";
+	this->printDeque();
+	milliseconds = static_cast<double>(end - start) * 1000.0 / CLOCKS_PER_SEC;
+	std::cout << "Time to process a range of " << this->myDeque.size() << " elements with std::deque :" << milliseconds << " milliseconds" << std::endl;
+}
+
+void PmergeMe::sortingVector() {
 	// check if the vector has an odd number of elements, if so, store the straggler
 	// 10 9 5 8 2 1 6 7 4 3 0 -> [ 0 ]
 	int straggler = -1;
@@ -202,19 +236,9 @@ PmergeMe::PmergeMe(std::string str) {
             pairs.push_back(std::make_pair(myVector[i + 1], myVector[i]));
     }
 
-	std::cout << "pairs: ";
-	for (std::vector<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it)
-		std::cout << "(" << it->first << ", " << it->second << ")";
-	std::cout << std::endl;
-
-	// sort all pairs by the second element (which is the greatest one of the pair)
+	// sort all pairs by the first element (which is the greatest one of the pair)
 	// (1, 2) (3, 4) (6, 7) (5, 8) (9, 10)
 	PmergeMe::insertionSort(pairs);
-
-	std::cout << "pairs: ";
-	for (std::vector<std::pair<int, int> >::iterator it = pairs.begin(); it != pairs.end(); ++it)
-		std::cout << "(" << it->first << ", " << it->second << ")";
-	std::cout << std::endl;
 
 	// rebuild the vector that contains all weakest numbers of each pair
     myVector.clear();
@@ -223,34 +247,51 @@ PmergeMe::PmergeMe(std::string str) {
         myVector.push_back(pairs[i].first);
     }
 
-	std::cout << "weakest of each pair: ";
-	this->print();
-
 	// generate the jacobsthal sequence
 	std::vector<size_t> jacobsthal = generateJacobsthalUpToValue(pairs.size() - 1);
-	std::cout << "generated jacobsthal sequence: ";
-    for (size_t i = 0; i < jacobsthal.size(); ++i) {
-        std::cout << jacobsthal[i] << " ";
-    }
-    std::cout << std::endl;
 
 	// access the pairs based on the generated jacobsthal sequence
 	// insert the strongest number of the pair into our vector using binary search
 	for (std::vector<size_t>::iterator it = jacobsthal.begin(); it != jacobsthal.end(); ++it) {
 		int value = pairs[*it].second;
-		std::cout << "value: " << value << std::endl;
 		PmergeMe::binarySearch(value, this->myVector);
 	}
 
 	// if there's a straggler, we also insert it using binary search
-	PmergeMe::binarySearch(straggler, this->myVector);
-	std::cout << "result: ";
-	this->print();
-
+	if (straggler != -1)
+		PmergeMe::binarySearch(straggler, this->myVector);
 }
 
-void PmergeMe::print() {
-	for (std::vector<int>::iterator it = myVector.begin(); it != myVector.end(); ++it)
-		std::cout << *it << " ";
-	std::cout << std::endl;
+void PmergeMe::sortingDeque() {
+	int straggler = -1;
+	if (myDeque.size() % 2 != 0) {
+        straggler = myDeque.back();
+        myDeque.pop_back();
+	}
+
+	std::vector<std::pair<int, int> > pairs;
+
+	for (size_t i = 0; i < myDeque.size(); i += 2) {
+        if (myDeque[i] < myDeque[i + 1])
+            pairs.push_back(std::make_pair(myDeque[i], myDeque[i + 1]));
+        else
+            pairs.push_back(std::make_pair(myDeque[i + 1], myDeque[i]));
+    }
+
+	PmergeMe::insertionSort(pairs);
+
+    myDeque.clear();
+    for (size_t i = 0; i < pairs.size(); i++) {
+        myDeque.push_back(pairs[i].first);
+    }
+
+	std::vector<size_t> jacobsthal = generateJacobsthalUpToValue(pairs.size() - 1);
+
+	for (std::vector<size_t>::iterator it = jacobsthal.begin(); it != jacobsthal.end(); ++it) {
+		int value = pairs[*it].second;
+		PmergeMe::binarySearch(value, this->myDeque);
+	}
+
+	if (straggler != -1)
+		PmergeMe::binarySearch(straggler, this->myDeque);
 }

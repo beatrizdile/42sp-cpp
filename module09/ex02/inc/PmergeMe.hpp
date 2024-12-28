@@ -12,6 +12,7 @@
 #include <sstream>
 #include <locale>
 #include <utility>
+#include <ctime>
 
 class PmergeMe {
 	private:
@@ -20,7 +21,10 @@ class PmergeMe {
 		void parseInput(std::string str);
 		std::vector<int> myVector;
 		std::deque<int> myDeque;
-		void print();
+		void printVector();
+		void printDeque();
+		void sortingVector();
+		void sortingDeque();
 	public:
 		~PmergeMe();
 		PmergeMe(PmergeMe const & other);
@@ -29,14 +33,14 @@ class PmergeMe {
 		template <typename T>
 		static void insertionSort(T &container) {
 			for (size_t index = 1; index < container.size(); index++) {
-				size_t previus = index - 1;
+				size_t previous = index - 1;
 				std::pair<int, int> currentValue = container[index];
-				while (container[previus].second > currentValue.second) {
-					container[previus + 1] = container[previus];
-					if (previus-- == 0)
+				while (container[previous].first > currentValue.first) {
+					container[previous + 1] = container[previous];
+					if (previous-- == 0)
 						break;
 				}
-				container[previus + 1] = currentValue;
+				container[previous + 1] = currentValue;
 			}
 		}
 
@@ -50,40 +54,22 @@ class PmergeMe {
 			typedef typename Container::iterator iterator;
 			iterator begin = container.begin();
 			iterator end = container.end();
-			
-			if (value > *(--end)) {
+
+			if (value > *(end - 1)) {
 				container.push_back(value);
 				return;
 			}
-			
-			end = container.end();
-			
+
 			if (value < *begin) {
 				container.insert(begin, value);
 				return;
 			}
 
-			iterator pos = begin;
-			while (begin < end) {
-				iterator mid = begin;
-				std::advance(mid, std::distance(begin, end) / 2);
-				
-				if (*mid == value) {
-					pos = mid;
-					break;
-				}
-				else if (*mid < value) {
-					begin = mid + 1;
-					pos = begin;
-				}
-				else {
-					end = mid;
-					pos = mid;
-				}
-			}
+			iterator pos = std::lower_bound(container.begin(), container.end(), value);
 
 			container.insert(pos, value);
 		}
+
 };
 
 #endif
