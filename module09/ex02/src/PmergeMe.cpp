@@ -1,5 +1,82 @@
 #include "PmergeMe.hpp"
 
+static std::string trim(const std::string& str) {
+    if (str.empty())
+        return str;
+
+    std::string result = str;
+    while (!result.empty() && isspace(result[0]))
+        result.erase(0, 1);
+
+    while (!result.empty() && isspace(result[result.length() - 1]))
+        result.erase(result.length() - 1, 1);
+
+    return result;
+}
+
+static std::vector<std::string> split(const std::string& str, char delimiter) {
+    std::vector<std::string> result;
+    std::string::size_type start = 0;
+    std::string::size_type end = str.find(delimiter);
+
+    while (end != std::string::npos) {
+        // only push back non-empty substrings
+        if (end > start) {
+            result.push_back(str.substr(start, end - start));
+        }
+
+        start = end + 1;
+        end = str.find(delimiter, start);
+    }
+
+    // only push back the last substring if it's not empty
+    if (start < str.length()) {
+        result.push_back(str.substr(start));
+    }
+
+    return result;
+}
+
+static int stringToInt(const std::string &str) {
+    std::istringstream stream(str);
+    stream.imbue(std::locale("C"));
+    int result;
+    if (stream >> result && stream.eof()) {
+        return result;
+    }
+    throw std::invalid_argument("Could not convert a number in the string to an integer");
+}
+
+void PmergeMe::parseInput(std::string str) {
+	str = trim(str);
+
+	if (str.empty())
+		throw std::invalid_argument("Empty string");
+
+	std::vector<std::string> array = split(str, ' ');
+
+	// check if there are only numbers in the array
+	for (std::vector<std::string>::iterator it = array.begin(); it != array.end(); ++it) {
+		for (std::string::iterator char_it = it->begin(); char_it != it->end(); ++char_it)
+			if (!isdigit(*char_it))
+				throw std::invalid_argument("Non digit character in string");
+	}
+
+	// check if there are repeated numbers in the array
+	for (std::vector<std::string>::iterator it = array.begin(); it != array.end(); ++it) {
+		for (std::vector<std::string>::iterator it2 = it + 1; it2 != array.end(); ++it2) {
+			if (*it == *it2)
+				throw std::invalid_argument("Repeated number in the string");
+		}
+	}
+
+	// make the string into integers and store them in a vector
+	for (std::vector<std::string>::iterator it = array.begin(); it != array.end(); ++it) {
+		int num = stringToInt(*it);
+		this->myVector.push_back(num);
+	}
+}
+
 static void removeDuplicates(std::vector<size_t>& sequence) {
     std::sort(sequence.begin(), sequence.end());
     std::vector<size_t>::iterator newEnd = std::unique(sequence.begin(), sequence.end());
@@ -82,83 +159,6 @@ static std::vector<size_t> generateJacobsthalUpToValue(size_t maxValue) {
 	return sequence;
 }
 
-static std::string trim(const std::string& str) {
-    if (str.empty())
-        return str;
-
-    std::string result = str;
-    while (!result.empty() && isspace(result[0]))
-        result.erase(0, 1);
-
-    while (!result.empty() && isspace(result[result.length() - 1]))
-        result.erase(result.length() - 1, 1);
-
-    return result;
-}
-
-static std::vector<std::string> split(const std::string& str, char delimiter) {
-    std::vector<std::string> result;
-    std::string::size_type start = 0;
-    std::string::size_type end = str.find(delimiter);
-
-    while (end != std::string::npos) {
-        // only push back non-empty substrings
-        if (end > start) {
-            result.push_back(str.substr(start, end - start));
-        }
-
-        start = end + 1;
-        end = str.find(delimiter, start);
-    }
-
-    // only push back the last substring if it's not empty
-    if (start < str.length()) {
-        result.push_back(str.substr(start));
-    }
-
-    return result;
-}
-
-static int stringToInt(const std::string &str) {
-    std::istringstream stream(str);
-    stream.imbue(std::locale("C"));
-    int result;
-    if (stream >> result && stream.eof()) {
-        return result;
-    }
-    throw std::invalid_argument("Could not convert a number in the string to an integer");
-}
-
-void PmergeMe::parseInput(std::string str) {
-	str = trim(str);
-
-	if (str.empty())
-		throw std::invalid_argument("Empty string");
-
-	std::vector<std::string> array = split(str, ' ');
-
-	// check if there are only numbers in the array
-	for (std::vector<std::string>::iterator it = array.begin(); it != array.end(); ++it) {
-		for (std::string::iterator char_it = it->begin(); char_it != it->end(); ++char_it)
-			if (!isdigit(*char_it))
-				throw std::invalid_argument("Non digit character in string");
-	}
-
-	// check if there are repeated numbers in the array
-	for (std::vector<std::string>::iterator it = array.begin(); it != array.end(); ++it) {
-		for (std::vector<std::string>::iterator it2 = it + 1; it2 != array.end(); ++it2) {
-			if (*it == *it2)
-				throw std::invalid_argument("Repeated number in the string");
-		}
-	}
-
-	// make the string into integers and store them in a vector
-	for (std::vector<std::string>::iterator it = array.begin(); it != array.end(); ++it) {
-		int num = stringToInt(*it);
-		this->myVector.push_back(num);
-	}
-}
-
 PmergeMe::PmergeMe() {}
 
 PmergeMe::~PmergeMe() {}
@@ -207,7 +207,6 @@ PmergeMe::PmergeMe(std::string str) {
 		std::cout << "(" << it->first << ", " << it->second << ")";
 	std::cout << std::endl;
 
-	// this is the insertion part of the algorithm
 	// sort all pairs by the second element (which is the greatest one of the pair)
 	// (1, 2) (3, 4) (6, 7) (5, 8) (9, 10)
 	PmergeMe::insertionSort(pairs);
@@ -228,17 +227,26 @@ PmergeMe::PmergeMe(std::string str) {
 	this->print();
 
 	// generate the jacobsthal sequence
-	std::vector<size_t> jacobsthal = generateJacobsthalUpToValue(200);
+	std::vector<size_t> jacobsthal = generateJacobsthalUpToValue(pairs.size() - 1);
 	std::cout << "generated jacobsthal sequence: ";
     for (size_t i = 0; i < jacobsthal.size(); ++i) {
         std::cout << jacobsthal[i] << " ";
     }
     std::cout << std::endl;
 
-	// this is the merge part of the algorithm
 	// access the pairs based on the generated jacobsthal sequence
 	// insert the strongest number of the pair into our vector using binary search
+	for (std::vector<size_t>::iterator it = jacobsthal.begin(); it != jacobsthal.end(); ++it) {
+		int value = pairs[*it].second;
+		std::cout << "value: " << value << std::endl;
+		PmergeMe::binarySearch(value, this->myVector);
+	}
+
 	// if there's a straggler, we also insert it using binary search
+	PmergeMe::binarySearch(straggler, this->myVector);
+	std::cout << "result: ";
+	this->print();
+
 }
 
 void PmergeMe::print() {

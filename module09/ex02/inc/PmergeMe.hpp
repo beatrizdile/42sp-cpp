@@ -40,23 +40,49 @@ class PmergeMe {
 			}
 		}
 
-		template <typename T>
-		static void jacobsthalSequence(size_t maxIndex, T &container) {
-			if (maxIndex == 1) {
-				container.push_back(1);
+		template<typename Container>
+		void binarySearch(int value, Container& container) {
+			if (container.empty()) {
+				container.push_back(value);
 				return;
 			}
-			container.push_back(0);
-			container.push_back(1);
-			size_t i = 2;
-			while (true) {
-				size_t current = container[i - 1] + 2 * container[i - 2];
-				if (current > maxIndex)
-					break;
-				container.push_back(current);
-				i++;
+
+			typedef typename Container::iterator iterator;
+			iterator begin = container.begin();
+			iterator end = container.end();
+			
+			if (value > *(--end)) {
+				container.push_back(value);
+				return;
 			}
-			container.erase(container.begin(), container.begin() + 2);
+			
+			end = container.end();
+			
+			if (value < *begin) {
+				container.insert(begin, value);
+				return;
+			}
+
+			iterator pos = begin;
+			while (begin < end) {
+				iterator mid = begin;
+				std::advance(mid, std::distance(begin, end) / 2);
+				
+				if (*mid == value) {
+					pos = mid;
+					break;
+				}
+				else if (*mid < value) {
+					begin = mid + 1;
+					pos = begin;
+				}
+				else {
+					end = mid;
+					pos = mid;
+				}
+			}
+
+			container.insert(pos, value);
 		}
 };
 
