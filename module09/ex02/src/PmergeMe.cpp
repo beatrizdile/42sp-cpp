@@ -189,9 +189,10 @@ void PmergeMe::printDeque() {
 }
 
 PmergeMe::PmergeMe(std::string str) {
-	// TODO: sorting when we only have one, two, three and four values
-
 	parseInput(str);
+
+	if (this->myVector.size() < 5 || this->myDeque.size() < 5)
+		throw std::invalid_argument("The sequence must contain at least 5 elements.");
 
 	std::cout << "Vector before: ";
 	this->printVector();
